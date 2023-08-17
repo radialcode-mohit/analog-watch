@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <title>Analog Clock</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            list-style-type: none;
+            text-decoration: none;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: url('./assets/images/jpeg/scenery.jpg');
+            background-size: cover;
+            z-index: -1;
+        }
+
+
+        .clock {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin-right: 20px;
+            background-color: #f8f8f8;
+            border: 2px solid #333;
+        }
+
+        .hour-hand,
+        .minute-hand,
+        .second-hand {
+            position: absolute;
+            transform-origin: center bottom;
+            background-color: #333;
+            transition: transform 0.5s cubic-bezier(0.42, 0.05, 0.17, 0.99);
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -100%) rotate(0deg);
+        }
+
+        .hour-hand {
+            width: 6px;
+            height: 60px;
+            border-radius: 6px 6px 0 0;
+            transform-origin: center bottom;
+            transform: translate(-50%, -100%) rotate(0deg);
+        }
+
+        .minute-hand {
+            width: 4px;
+            height: 80px;
+            border-radius: 4px 4px 0 0;
+            background-color: #555;
+            transform: translate(-50%, -100%) rotate(0deg);
+        }
+
+        .second-hand {
+            width: 2px;
+            height: 90px;
+            border-radius: 2px 2px 0 0;
+            background-color: #f00;
+            transform: translate(-50%, -100%) rotate(0deg);
+        }
+
+        .center {
+            width: 10px;
+            height: 10px;
+            background-color: #333;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .display-time {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        #showTimeButton {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #showTimeButton:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background"></div>
+    <div class="clock">
+        <div class="hour-hand"></div>
+        <div class="minute-hand"></div>
+        <div class="second-hand"></div>
+        <div class="center"></div>
+    </div>
+    <button id="showTimeButton">Show Time</button>
+    <div class="display-time" id="displayTime"></div>
+    <script>
+        const hourHand = document.querySelector('.hour-hand');
+        const minuteHand = document.querySelector('.minute-hand');
+        const secondHand = document.querySelector('.second-hand');
+        const displayTime = document.getElementById('displayTime');
+        const showTimeButton = document.getElementById('showTimeButton');
+
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours() % 12;
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+
+            const hourDeg = (hours * 30) + (0.5 * minutes);
+            const minuteDeg = (minutes * 6) + (0.1 * seconds);
+            const secondDeg = seconds * 6;
+
+            hourHand.style.transform = `translate(-50%, -100%) rotate(${hourDeg}deg)`;
+            minuteHand.style.transform = `translate(-50%, -100%) rotate(${minuteDeg}deg)`;
+            secondHand.style.transform = `translate(-50%, -100%) rotate(${secondDeg}deg)`;
+        }
+
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        showTimeButton.addEventListener('click', () => {
+            const currentTime = new Date();
+            const formattedTime = currentTime.toLocaleTimeString();
+            displayTime.textContent = `Current time: ${formattedTime}`;
+        });
+    </script>
+</body>
+
+</html>
